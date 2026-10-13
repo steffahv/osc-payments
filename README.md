@@ -1,4 +1,4 @@
-# WEB-PAYM
+# OSC-PAYMENTS
 
 Local foundation for a modular administrative payment management platform.
 The system does not execute bank transfers.
@@ -122,6 +122,8 @@ npm.cmd run build
 
 Current tests cover infrastructure and configuration, not authentication.
 Recorded results are in [Validation](docs/validation.md).
+The [test map](docs/testing.md) links each current test to its requirement and
+lists execution commands, manual checks, and planned security coverage.
 
 ## Initial administrator
 
@@ -149,9 +151,8 @@ password update within PostgreSQL as well.
 - [Database design](docs/database-design.md): data dictionary and ER diagram.
 - [Authorization](docs/authorization.md): views, actions, and contextual scope.
 - [Validation](docs/validation.md): evidence and limitations.
+- [Test map](docs/testing.md): implemented tests, commands, and planned coverage.
 
 Behavior changes must update both technical and business documentation where
 applicable. Code comments explain decisions, boundaries, and responsibilities
 without mechanically repeating each instruction.
-=======
-# osc-payments

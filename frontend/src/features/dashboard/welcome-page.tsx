@@ -1,12 +1,14 @@
 import { Layers3, ShieldCheck, UsersRound } from "lucide-react"
+import { AccountMenu } from "@/features/auth/account-menu"
 
 export function WelcomePage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b bg-white">
-        <div className="mx-auto flex max-w-6xl items-center gap-3 px-6 py-5">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-6 py-5">
           <span className="flex size-10 items-center justify-center rounded-xl bg-primary text-white"><Layers3 aria-hidden="true" size={22} /></span>
           <div><p className="font-bold tracking-tight">WEB-PAYM</p><p className="text-xs text-muted-foreground">Administrative payment management</p></div>
+          <AccountMenu />
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
@@ -26,7 +28,7 @@ export function WelcomePage() {
             </section>
           ))}
         </div>
-        <p className="mt-10 text-sm text-muted-foreground">Platform under development. User sign-in will be available in a future phase.</p>
+        <p className="mt-10 text-sm text-muted-foreground">Platform under development. Additional modules will be available in future phases.</p>
       </main>
       <footer className="mx-auto max-w-6xl border-t px-6 py-6 text-xs text-muted-foreground">WEB-PAYM · Development environment</footer>
     </div>

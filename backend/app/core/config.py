@@ -25,7 +25,9 @@ class Settings(BaseSettings):
     postgres_port: int = Field(default=55432, ge=1, le=65535)
     cookie_secure: bool = False
     session_absolute_seconds: int = Field(default=28800, gt=0)
-    session_idle_seconds: int = Field(default=1800, gt=0)
+    #time after which a session will be invalidated if there is no activity
+    session_idle_seconds: int = Field(default=5400, gt=0)
+    frontend_origin: str = "http://localhost:5173"
 
     @model_validator(mode="after")
     def validate_environment(self) -> "Settings":

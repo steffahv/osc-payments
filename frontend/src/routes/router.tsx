@@ -1,9 +1,12 @@
 import { createBrowserRouter, Link } from "react-router"
 import { WelcomePage } from "@/features/dashboard/welcome-page"
+import { LoginPage } from "@/features/auth/login-page"
+import { ProtectedRoute } from "@/features/auth/session-gate"
 
-// Only a public welcome page exists. Authenticated routes arrive in Phase D.
+// Authentication gates navigation; backend permissions must protect future APIs.
 export const router = createBrowserRouter([
-  { path: "/", element: <WelcomePage /> },
+  { path: "/login", element: <LoginPage /> },
+  { element: <ProtectedRoute />, children: [{ path: "/", element: <WelcomePage /> }] },
   {
     path: "*",
     element: (

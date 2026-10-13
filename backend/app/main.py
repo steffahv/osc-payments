@@ -7,6 +7,10 @@ from fastapi import FastAPI
 from app.api.router import router
 from app.core.config import get_settings
 from app.db.session import get_engine
+from app.core.origin_security import OriginSecurityMiddleware
+from app.api.health import router as health_router
+from app.modules.auth.router import router as auth_router
+from fastapi.middleware.cors import CORSMiddleware
 
 
 @asynccontextmanager
@@ -28,7 +32,17 @@ def create_app() -> FastAPI:
         openapi_url="/api/openapi.json" if development else None,
         lifespan=lifespan,
     )
-    app.include_router(router)
+    app.add_middleware(OriginSecurityMiddleware)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[settings.frontend_origin],
+        allow_credentials=True,
+        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
+        allow_headers=["Content-Type"],
+    )
+
+    app.include_router(health_router, prefix="/api/v1")
+    app.include_router(auth_router, prefix="/api/v1")
     return app
 
 

@@ -290,6 +290,69 @@ erDiagram
     }
 ```
 
+## How the three access relationships work together
+
+This is the planned behavior for Phase C, not an active database feature today.
+The public Phase B welcome page does not read these tables or enforce permissions.
+
+| Relationship | Question answered | Does it grant access by itself? |
+| --- | --- | --- |
+| `team_memberships` | Which teams does this user belong to? | No. It establishes organizational membership. |
+| `role_permissions` | Which views/actions does this role permit? | No. A role must be assigned to a user. |
+| `user_role_assignments` | Which role does this user hold, and where does it apply? | It grants the role's permissions only while the assignment and all applicable conditions are valid. |
+
+For example, suppose an active user named Alex belongs to North and South.
+Illustrative role names and permission codes below are not seeded business rules.
+Display names represent foreign-key IDs for readability.
+
+`team_memberships`:
+
+| User | Team | is_active |
+| --- | --- | --- |
+| Alex | North | true |
+| Alex | South | true |
+
+`role_permissions`:
+
+| Role | Permission |
+| --- | --- |
+| Receipt reader | receipts.view |
+| Analytics reader | analytics.view |
+
+`user_role_assignments`:
+
+| User | Role | scope | team_id | revoked_at |
+| --- | --- | --- | --- | --- |
+| Alex | Receipt reader | team | North | NULL |
+| Alex | Analytics reader | global | NULL | NULL |
+
+Assuming the roles and modules are enabled, Alex can view receipts for North
+and has global analytics access. Alex cannot view South receipts merely because
+of South membership. A North receipt grant also does not allow editing receipts:
+that would require a separate action. The precise analytics datasets and receipt
+operations remain future business decisions.
+
+For a team-scoped resource, the planned backend evaluation is:
+
+1. Validate the session and active user.
+2. Find the required permission and verify its module is enabled.
+3. Find an unrevoked user assignment to an active role containing that permission.
+4. Accept a global assignment, or require a matching team plus active membership
+   and active team for a contextual assignment.
+5. Filter collection queries by the same effective scope. Deny when no grant applies.
+
+Membership creation grants nothing automatically. Adding a permission to a role
+affects everyone assigned that role, within their assignment scopes. Revoking one
+user assignment does not modify the role or other users. Removing a permission
+from one role does not remove matching grants from another role. Global grants
+do not require team memberships and are not revoked merely by leaving one team.
+Removing membership revokes that user's assignments for that team; rejoining
+requires new assignments. Audit records preserve changes.
+
+This separation keeps view access configurable through data without adding a
+column per view to users or hardcoding role names. Planned validation is mapped
+under RBAC-01 through DATA-03 in the [test map](testing.md).
+
 ## Flexibility decisions
 
 - No per-view columns or authorization based on role names.
