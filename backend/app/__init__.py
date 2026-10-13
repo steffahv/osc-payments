@@ -1,0 +1,1 @@
+"""WEB-PAYM modular monolith."""
