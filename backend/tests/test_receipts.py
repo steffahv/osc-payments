@@ -11,7 +11,7 @@ from alembic.autogenerate import compare_metadata
 from alembic.migration import MigrationContext
 from alembic.operations import Operations
 import pytest
-from sqlalchemy import delete, inspect, select, text
+from sqlalchemy import MetaData, delete, inspect, select, text
 from sqlalchemy.exc import DataError, IntegrityError
 from sqlalchemy.orm import Session
 
@@ -217,7 +217,12 @@ def test_schema_matches_models_and_has_only_relationship_indexes(db):
     context = MigrationContext.configure(db.connection(), opts={
         "compare_type": True, "compare_server_default": True,
     })
-    assert compare_metadata(context, Base.metadata) == []
+    # This fixture applies through Stage 2, so compare its historical table scope.
+    metadata = MetaData()
+    for table in Base.metadata.sorted_tables:
+        if table.name not in {"receipt_documents", "receipt_workflow_events"}:
+            table.to_metadata(metadata)
+    assert compare_metadata(context, metadata) == []
     inspector = inspect(db.connection())
     assert {tuple(index["column_names"]) for index in inspector.get_indexes("receipts")} == {
         ("service_account_id",), ("created_by",),

@@ -7,4 +7,4 @@ from app.modules.system_modules.models import SystemModule
 from app.modules.auth.models import AuthSession, AuthRateLimit
 from app.modules.audit.models import AuditLog
 from app.modules.master_data.models import UtilityType, NodeType, Node, Provider, ServiceAccount
-from app.modules.receipts.models import Receipt, ElectricityReceiptDetails
+from app.modules.receipts.models import Receipt, ElectricityReceiptDetails, ReceiptDocument, ReceiptWorkflowEvent
