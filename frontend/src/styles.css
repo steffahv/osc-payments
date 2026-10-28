@@ -30,3 +30,11 @@
   * { @apply border-border; }
   body { margin: 0; min-width: 320px; }
 }
+
+@layer components {
+  .field-label { @apply block text-sm font-medium; }
+  .workspace-input { @apply mt-2 block h-10 w-full rounded-md border bg-white px-3 text-sm font-normal; }
+  .workspace input:focus-visible, .workspace select:focus-visible, .workspace button:focus-visible, .workspace a:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+}

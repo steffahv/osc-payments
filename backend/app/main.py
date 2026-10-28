@@ -10,6 +10,8 @@ from app.db.session import get_engine
 from app.core.origin_security import OriginSecurityMiddleware
 from app.api.health import router as health_router
 from app.modules.auth.router import router as auth_router
+from app.modules.master_data.router import router as master_data_router
+from app.modules.receipts.router import router as receipts_router
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -43,6 +45,8 @@ def create_app() -> FastAPI:
 
     app.include_router(health_router, prefix="/api/v1")
     app.include_router(auth_router, prefix="/api/v1")
+    app.include_router(master_data_router, prefix="/api/v1")
+    app.include_router(receipts_router, prefix="/api/v1")
     return app
 
 
